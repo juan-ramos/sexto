@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Experiencia 2 · Tasas unitarias en acción</title>
+  <style>
+    :root {
+      --bg: #f7faf9;
+      --card: #ffffff;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --teal: #0f766e;
+      --teal-2: #14b8a6;
+      --yellow: #f59e0b;
+      --blue: #0ea5e9;
+      --pink: #ec4899;
+      --purple: #8b5cf6;
+      --green: #16a34a;
+      --red: #dc2626;
+      --border: #e2e8f0;
+      --shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+      --radius: 28px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--ink);
+      font-weight: 900;
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      background: var(--teal);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-size: 23px;
+    }
+
+    .brand small {
+      display: block;
+      color: var(--muted);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .links {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .links a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .links a:hover { color: var(--teal); }
+
+    .btn {
+      border: 0;
+      border-radius: 18px;
+      padding: 13px 18px;
+      font-weight: 900;
+      cursor: pointer;
+      background: var(--ink);
+      color: white;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.14);
+    }
+
+    .btn.secondary {
+      background: white;
+      color: var(--ink);
+      border: 1px solid var(--border);
+      box-shadow: none;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(20, 184, 166, 0.20), transparent 28%),
+        radial-gradient(circle at 85% 15%, rgba(245, 158, 11, 0.22), transparent 28%),
+        radial-gradient(circle at 80% 80%, rgba(14, 165, 233, 0.14), transparent 30%);
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 70px 24px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 42px;
+      align-items: center;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: white;
+      border: 1px solid rgba(15, 118, 110, 0.15);
+      color: var(--teal);
+      font-weight: 900;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: clamp(42px, 7vw, 78px);
+      line-height: 0.95;
+      margin: 0;
+      letter-spacing: -0.05em;
+    }
+
+    h1 span { color: var(--teal); }
+
+    .lead {
+      font-size: 20px;
+      color: var(--muted);
+      margin: 24px 0 30px;
+      max-width: 680px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .hero-card, .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+
+    .hero-card { padding: 30px; }
+
+    .mini-title {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .round-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 22px;
+      background: #fef3c7;
+      display: grid;
+      place-items: center;
+      font-size: 28px;
+    }
+
+    .problem-box {
+      border-radius: 24px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      padding: 24px;
+      margin: 18px 0;
+    }
+
+    .problem-box strong {
+      display: block;
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .stat {
+      border-radius: 24px;
+      padding: 20px;
+      text-align: center;
+      background: #ccfbf1;
+      font-weight: 900;
+    }
+
+    .stat:nth-child(2) { background: #fef3c7; }
+    .stat span {
+      display: block;
+      font-size: 42px;
+      color: var(--teal);
+    }
+    .stat:nth-child(2) span { color: #b45309; }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      padding-top: 40px;
+      padding-bottom: 40px;
+    }
+
+    .feature { padding: 26px; }
+    .feature .icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 18px;
+      background: #ccfbf1;
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+      margin-bottom: 14px;
+    }
+
+    h2 {
+      font-size: clamp(34px, 5vw, 54px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+      margin: 12px 0 16px;
+    }
+
+    .section-subtitle {
+      color: var(--muted);
+      font-size: 18px;
+      max-width: 760px;
+    }
+
+    .cycle-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 34px;
+    }
+
+    .cycle-card {
+      padding: 24px;
+      min-height: 190px;
+    }
+
+    .cycle-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .number {
+      width: 48px;
+      height: 48px;
+      border-radius: 17px;
+      background: var(--ink);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+    }
+
+    .white-section { background: white; }
+
+    .activity-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+      margin-top: 34px;
+    }
+
+    .activity-card {
+      padding: 26px;
+      box-shadow: none;
+      border-left: 8px solid var(--yellow);
+    }
+
+    .activity-card.blue { border-left-color: var(--blue); }
+    .activity-card.pink { border-left-color: var(--pink); }
+    .activity-card.purple { border-left-color: var(--purple); }
+
+    .pill {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #fef3c7;
+      color: #92400e;
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 14px;
+    }
+
+    .blue .pill { background: #e0f2fe; color: #075985; }
+    .pink .pill { background: #fce7f3; color: #9d174d; }
+    .purple .pill { background: #ede9fe; color: #5b21b6; }
+
+    textarea, input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 14px 16px;
+      font: inherit;
+      outline: none;
+      background: white;
+    }
+
+    textarea { min-height: 130px; resize: vertical; }
+    input:focus, textarea:focus { border-color: var(--teal-2); box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.14); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 18px;
+      margin-top: 12px;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 12px;
+      text-align: center;
+    }
+
+    th { background: #f1f5f9; }
+    td.answer { color: var(--teal); font-weight: 900; }
+
+    .criteria {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .criteria div {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
+      font-size: 14px;
+    }
+
+    .theory-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+      margin-top: 34px;
+    }
+
+    .dark-card {
+      background: var(--ink);
+      color: white;
+      padding: 34px;
+    }
+
+    .formula {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 22px;
+      text-align: center;
+      font-size: 26px;
+      font-weight: 900;
+      margin-top: 20px;
+    }
+
+    .light-card { padding: 34px; }
+    .steps p { font-size: 18px; }
+    .steps strong { color: var(--teal); }
+
+    .practice-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      margin-top: 34px;
+    }
+
+    .practice-card {
+      padding: 24px;
+      background: #f8fafc;
+      box-shadow: none;
+    }
+
+    .answer-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .feedback {
+      display: none;
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      font-weight: 800;
+    }
+
+    .feedback.ok { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+    .feedback.bad { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+    .hint {
+      display: none;
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: #fefce8;
+      color: #854d0e;
+      border: 1px solid #fde68a;
+      font-size: 14px;
+    }
+
+    .score-card {
+      margin-top: 26px;
+      padding: 26px;
+      background: linear-gradient(90deg, #fef3c7, #ccfbf1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .score-card strong { font-size: 48px; }
+
+    .closing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+      margin-top: 34px;
+    }
+
+    .choice-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .choice-card {
+      padding: 24px;
+    }
+
+    .choice-boxes {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .choice-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 18px;
+    }
+
+    .result {
+      display: none;
+      padding: 14px;
+      border-radius: 18px;
+      background: #fef3c7;
+      color: #854d0e;
+      border: 1px solid #fde68a;
+      font-weight: 700;
+    }
+
+    .result.correct {
+      background: #dcfce7;
+      color: #166534;
+      border-color: #bbf7d0;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      background: white;
+      text-align: center;
+      color: var(--muted);
+      padding: 28px 24px;
+      font-weight: 700;
+    }
+
+    @media (max-width: 900px) {
+      .links { display: none; }
+      .hero-grid, .features, .cycle-grid, .activity-grid, .theory-grid, .practice-grid, .closing-grid {
+        grid-template-columns: 1fr;
+      }
+      .container { padding: 48px 18px; }
+      .nav { padding: 12px 18px; }
+      .criteria, .choice-boxes { grid-template-columns: 1fr; }
+      .score-card { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <a class="brand" href="#inicio">
+        <div class="brand-icon">÷</div>
+        <div>
+          Tasas unitarias
+          <small>Experiencia 2 · Unidad 5</small>
+        </div>
+      </a>
+      <nav class="links">
+        <a href="#inicio">Inicio</a>
+        <a href="#ruta">Ruta</a>
+        <a href="#actividad">Actividad</a>
+        <a href="#teoria">Teoría</a>
+        <a href="#practica">Práctica</a>
+        <a href="#cierre">Cierre</a>
+      </nav>
+      <button class="btn secondary" onclick="reiniciar()">Reiniciar</button>
+    </div>
+  </header>
+
+  <section id="inicio" class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="tag">Matemáticas para el bienestar escolar</span>
+        <h1>Aprende a decidir con <span>tasas unitarias</span></h1>
+        <p class="lead">Explora cuánto corresponde a <strong>1 unidad</strong> para comparar precios, tiempos y cantidades en la Feria Escolar de Bienestar.</p>
+        <div class="hero-actions">
+          <a href="#actividad"><button class="btn">Comenzar actividad →</button></a>
+          <a href="#teoria"><button class="btn secondary">Ir a la teoría</button></a>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="mini-title">
+          <div class="round-icon">💡</div>
+          <div>
+            <h3 style="margin:0;font-size:26px;">Reto detonador</h3>
+            <p style="margin:0;color:var(--muted);font-weight:700;">Sin fórmula nueva al inicio</p>
+          </div>
+        </div>
+        <div class="problem-box">
+          <strong>8 vasos de fruta cuestan $120.</strong>
+          ¿Cuánto cuesta 1 vaso?
+        </div>
+        <div class="stats">
+          <div class="stat"><span>$120</span>costo total</div>
+          <div class="stat"><span>8</span>vasos</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container features">
+    <article class="card feature">
+      <div class="icon">🎯</div>
+      <h3>Propósito</h3>
+      <p>Calcular una cantidad por cada 1 unidad para comparar opciones de forma justa.</p>
+    </article>
+    <article class="card feature">
+      <div class="icon">📘</div>
+      <h3>Contenido</h3>
+      <p>Tasa, tasa unitaria, costo por unidad, estudiantes por minuto y vasos por litro.</p>
+    </article>
+    <article class="card feature">
+      <div class="icon">✨</div>
+      <h3>Aprendizaje activo</h3>
+      <p>Primero descubres, luego formalizas y después practicas con retroalimentación.</p>
+    </article>
+  </section>
+
+  <section id="ruta" class="container">
+    <span class="tag">Ruta de aprendizaje</span>
+    <h2>Ciclo del pensamiento matemático</h2>
+    <p class="section-subtitle">La página sigue una ruta que permite pensar primero con estrategias propias y después conectar esas ideas con el procedimiento formal.</p>
+
+    <div class="cycle-grid">
+      <article class="card cycle-card"><div class="cycle-head"><div class="number">1</div><h3>Plantear</h3></div><p>Observa un reto real antes de aprender el procedimiento formal.</p></article>
+      <article class="card cycle-card"><div class="cycle-head"><div class="number">2</div><h3>Resolver</h3></div><p>Usa dibujos, tablas, operaciones o explicaciones propias.</p></article>
+      <article class="card cycle-card"><div class="cycle-head"><div class="number">3</div><h3>Compartir</h3></div><p>Compara estrategias usando Conectar · Ampliar · Retar.</p></article>
+      <article class="card cycle-card"><div class="cycle-head"><div class="number">4</div><h3>Elegir</h3></div><p>Selecciona la estrategia más clara, precisa y útil.</p></article>
+      <article class="card cycle-card"><div class="cycle-head"><div class="number">5</div><h3>Traducir</h3></div><p>Conecta lo descubierto con el lenguaje matemático formal.</p></article>
+      <article class="card cycle-card"><div class="cycle-head"><div class="number">6</div><h3>Practicar</h3></div><p>Resuelve situaciones nuevas con retroalimentación inmediata.</p></article>
+    </div>
+  </section>
+
+  <section id="actividad" class="white-section">
+    <div class="container">
+      <span class="tag">Actividad interactiva</span>
+      <h2>Del reto inicial a la estrategia</h2>
+      <p class="section-subtitle">Completa cada estación como si fuera una worksheet digital. Tus respuestas quedan visibles mientras avanzas.</p>
+
+      <div class="activity-grid">
+        <article class="card activity-card">
+          <span class="pill">1. Plantear</span>
+          <h3>Primer intento</h3>
+          <p>En la feria, un equipo vende <strong>8 vasos de fruta por $120</strong>. Antes de usar una fórmula, explica cómo encontrarías el costo de 1 vaso.</p>
+          <textarea id="ownStrategy" placeholder="Puedo resolverlo usando..."></textarea>
+        </article>
+
+        <article class="card activity-card blue">
+          <span class="pill">2. Resolver</span>
+          <h3>Tabla de apoyo</h3>
+          <table>
+            <thead><tr><th>Vasos</th><th>Costo</th><th>Acción</th></tr></thead>
+            <tbody>
+              <tr><td><strong>8</strong></td><td>$120</td><td>Dato inicial</td></tr>
+              <tr><td><strong>4</strong></td><td>$60</td><td>Mitad</td></tr>
+              <tr><td><strong>2</strong></td><td>$30</td><td>Mitad</td></tr>
+              <tr><td><strong>1</strong></td><td class="answer">$15</td><td>Mitad</td></tr>
+            </tbody>
+          </table>
+          <p><strong>Idea clave:</strong> llegar a 1 unidad permite comparar opciones de forma sencilla.</p>
+        </article>
+
+        <article class="card activity-card pink">
+          <span class="pill">3. Compartir</span>
+          <h3>Conectar · Ampliar · Retar</h3>
+          <p>Escribe una idea que escuchaste o una duda que todavía quieras comprobar.</p>
+          <textarea id="shareIdea" placeholder="Conecto con... / Amplío mi idea porque... / Todavía me reta..."></textarea>
+        </article>
+
+        <article class="card activity-card purple">
+          <span class="pill">4. Elegir</span>
+          <h3>La estrategia más útil</h3>
+          <div class="criteria">
+            <div><strong>Claridad</strong><br>¿Se entiende?</div>
+            <div><strong>Precisión</strong><br>¿Conserva los datos?</div>
+            <div><strong>Utilidad</strong><br>¿Ayuda a decidir?</div>
+          </div>
+          <textarea id="chosenStrategy" placeholder="Elegimos la estrategia de... porque..."></textarea>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="teoria" class="container">
+    <span class="tag">Formalización</span>
+    <h2>Ahora sí: ¿qué es una tasa unitaria?</h2>
+    <p class="section-subtitle">La estrategia descubierta se traduce al procedimiento formal: dividir para encontrar cuánto corresponde a 1 unidad.</p>
+
+    <div class="theory-grid">
+      <article class="card dark-card">
+        <h3 style="font-size:32px;margin-top:0;">Definición</h3>
+        <p>Una <strong>tasa</strong> compara dos cantidades con unidades diferentes. Una <strong>tasa unitaria</strong> indica cuánto corresponde cuando una cantidad vale <strong>1</strong>.</p>
+        <div class="formula">Tasa unitaria = total ÷ unidades</div>
+      </article>
+
+      <article class="card light-card">
+        <h3 style="font-size:32px;margin-top:0;">Resolución formal del reto</h3>
+        <div class="steps">
+          <p><strong>Dato:</strong> 8 vasos cuestan $120.</p>
+          <p><strong>Operación:</strong> 120 ÷ 8 = 15.</p>
+          <p><strong>Respuesta:</strong> $15 por 1 vaso.</p>
+          <p><strong>Interpretación:</strong> la tasa unitaria es $15 por vaso.</p>
+        </div>
+        <textarea id="meaning" placeholder="Explica con tus palabras qué significa “por 1 unidad”..."></textarea>
+      </article>
+    </div>
+  </section>
+
+  <section id="practica" class="white-section">
+    <div class="container">
+      <span class="tag">Práctica interactiva</span>
+      <h2>Resuelve nuevas situaciones</h2>
+      <p class="section-subtitle">Calcula la tasa unitaria, revisa tu respuesta y usa la pista para corregir si es necesario.</p>
+
+      <div class="practice-grid">
+        <article class="card practice-card" data-answer="15" data-hint="Divide el costo total entre la cantidad de vasos: 90 ÷ 6.">
+          <h3>Puesto de frutas</h3>
+          <p>Un paquete de 6 vasos de fruta cuesta $90. ¿Cuál es el costo por 1 vaso?</p>
+          <div class="answer-row"><input type="number" placeholder="Respuesta"><button class="btn" onclick="checkPractice(this)">Revisar</button></div>
+          <small>Unidad esperada: pesos por vaso</small>
+          <div class="feedback ok">Correcto. Tu tasa unitaria está bien calculada.</div>
+          <div class="feedback bad">Revisa el cálculo. Recuerda llegar a 1 unidad.</div>
+          <div class="hint"></div>
+        </article>
+
+        <article class="card practice-card" data-answer="3" data-hint="Divide los estudiantes entre los minutos: 24 ÷ 8.">
+          <h3>Circuito deportivo</h3>
+          <p>En 8 minutos participan 24 estudiantes. ¿Cuántos estudiantes participan por minuto?</p>
+          <div class="answer-row"><input type="number" placeholder="Respuesta"><button class="btn" onclick="checkPractice(this)">Revisar</button></div>
+          <small>Unidad esperada: estudiantes por minuto</small>
+          <div class="feedback ok">Correcto. Tu tasa unitaria está bien calculada.</div>
+          <div class="feedback bad">Revisa el cálculo. Recuerda llegar a 1 unidad.</div>
+          <div class="hint"></div>
+        </article>
+
+        <article class="card practice-card" data-answer="6" data-hint="Divide los vasos entre los litros: 30 ÷ 5.">
+          <h3>Bebidas saludables</h3>
+          <p>Se preparan 30 vasos de agua de fruta con 5 litros. ¿Cuántos vasos se obtienen por litro?</p>
+          <div class="answer-row"><input type="number" placeholder="Respuesta"><button class="btn" onclick="checkPractice(this)">Revisar</button></div>
+          <small>Unidad esperada: vasos por litro</small>
+          <div class="feedback ok">Correcto. Tu tasa unitaria está bien calculada.</div>
+          <div class="feedback bad">Revisa el cálculo. Recuerda llegar a 1 unidad.</div>
+          <div class="hint"></div>
+        </article>
+
+        <article class="card practice-card" data-answer="25" data-hint="Divide el dinero recaudado entre los boletos: 250 ÷ 10.">
+          <h3>Boletos de la feria</h3>
+          <p>Por 10 boletos se recaudan $250. ¿Cuánto cuesta 1 boleto?</p>
+          <div class="answer-row"><input type="number" placeholder="Respuesta"><button class="btn" onclick="checkPractice(this)">Revisar</button></div>
+          <small>Unidad esperada: pesos por boleto</small>
+          <div class="feedback ok">Correcto. Tu tasa unitaria está bien calculada.</div>
+          <div class="feedback bad">Revisa el cálculo. Recuerda llegar a 1 unidad.</div>
+          <div class="hint"></div>
+        </article>
+      </div>
+
+      <div class="card score-card">
+        <div>
+          <h3 style="margin:0;font-size:28px;">🏆 Puntaje de práctica</h3>
+          <p style="margin:4px 0 0;color:var(--muted);font-weight:800;">Respuestas correctas revisadas</p>
+        </div>
+        <strong><span id="score">0</span> / 4</strong>
+      </div>
+    </div>
+  </section>
+
+  <section id="cierre" class="container">
+    <span class="tag">Decisión y reflexión</span>
+    <h2>Usa la tasa unitaria para elegir</h2>
+    <p class="section-subtitle">El resultado matemático debe ayudarte a justificar una decisión en un contexto real.</p>
+
+    <div class="closing-grid">
+      <article class="card choice-card">
+        <h3 style="font-size:28px;margin-top:0;">Reto final</h3>
+        <p><strong>¿Cuál circuito atiende más estudiantes por minuto?</strong></p>
+        <div class="choice-boxes">
+          <div class="choice-box"><strong>Circuito A</strong><br>32 estudiantes en 8 minutos</div>
+          <div class="choice-box"><strong>Circuito B</strong><br>45 estudiantes en 15 minutos</div>
+        </div>
+        <div class="choice-row">
+          <button class="btn secondary" onclick="checkChallenge('A')">Circuito A</button>
+          <button class="btn secondary" onclick="checkChallenge('B')">Circuito B</button>
+          <button class="btn secondary" onclick="checkChallenge('E')">Empate</button>
+        </div>
+        <div id="challengeResult" class="result"></div>
+      </article>
+
+      <article class="card dark-card">
+        <h3 style="font-size:28px;margin-top:0;">Reflexión de salida</h3>
+        <p>Completa la idea:</p>
+        <textarea id="reflection" style="background:rgba(255,255,255,0.1);color:white;border-color:rgba(255,255,255,0.2);" placeholder="Hoy aprendí que una tasa unitaria sirve para..."></textarea>
+        <div class="formula" style="font-size:18px;text-align:left;">
+          <strong>Tarea sugerida:</strong><br>
+          Busca una situación real donde puedas calcular una tasa unitaria: precio por pieza, costo por litro, páginas por minuto o kilómetros por hora. Escribe el procedimiento y explica qué decisión te ayuda a tomar.
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <footer>
+    Unidad 5 · Matemáticas para el bienestar · Experiencia 2<br>
+    Página educativa interactiva para trabajar tasas unitarias en contextos escolares.
+  </footer>
+
+  <script>
+    function checkPractice(button) {
+      const card = button.closest('.practice-card');
+      const expected = Number(card.dataset.answer);
+      const input = card.querySelector('input');
+      const value = Number(input.value);
+      const ok = card.querySelector('.feedback.ok');
+      const bad = card.querySelector('.feedback.bad');
+      const hint = card.querySelector('.hint');
+
+      ok.style.display = 'none';
+      bad.style.display = 'none';
+      hint.style.display = 'none';
+
+      if (Math.abs(value - expected) < 0.001) {
+        ok.style.display = 'block';
+        card.dataset.correct = 'true';
+      } else {
+        bad.style.display = 'block';
+        hint.textContent = 'Pista: ' + card.dataset.hint;
+        hint.style.display = 'block';
+        card.dataset.correct = 'false';
+      }
+
+      updateScore();
+    }
+
+    function updateScore() {
+      const cards = document.querySelectorAll('.practice-card');
+      let score = 0;
+      cards.forEach(card => {
+        if (card.dataset.correct === 'true') score++;
+      });
+      document.getElementById('score').textContent = score;
+    }
+
+    function checkChallenge(choice) {
+      const result = document.getElementById('challengeResult');
+      result.style.display = 'block';
+      result.classList.remove('correct');
+
+      if (choice === 'A') {
+        result.classList.add('correct');
+        result.innerHTML = '<strong>Correcto.</strong> Circuito A: 32 ÷ 8 = 4 estudiantes por minuto. Circuito B: 45 ÷ 15 = 3 estudiantes por minuto. El circuito A es más eficiente.';
+      } else {
+        result.innerHTML = '<strong>Casi.</strong> Revisa la tasa unitaria de cada circuito. Circuito A: 32 ÷ 8 = 4. Circuito B: 45 ÷ 15 = 3. El circuito A atiende más estudiantes por minuto.';
+      }
+    }
+
+    function reiniciar() {
+      document.querySelectorAll('textarea').forEach(area => area.value = '');
+      document.querySelectorAll('input').forEach(input => input.value = '');
+      document.querySelectorAll('.feedback').forEach(item => item.style.display = 'none');
+      document.querySelectorAll('.hint').forEach(item => item.style.display = 'none');
+      document.querySelectorAll('.practice-card').forEach(card => card.dataset.correct = 'false');
+      const result = document.getElementById('challengeResult');
+      result.style.display = 'none';
+      result.classList.remove('correct');
+      document.getElementById('score').textContent = '0';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
