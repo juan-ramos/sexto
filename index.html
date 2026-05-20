@@ -23,6 +23,38 @@
       --radius: 28px;
     }
 
+    .student-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .save-panel {
+      background: linear-gradient(135deg, #ecfeff, #fef3c7);
+      border: 1px solid rgba(20, 184, 166, 0.25);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .save-status {
+      display: none;
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      font-weight: 800;
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .save-status.error {
+      background: #fee2e2;
+      color: #991b1b;
+      border-color: #fecaca;
+    }
+
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
@@ -512,6 +544,7 @@
 
     @media (max-width: 900px) {
       .links { display: none; }
+      .student-fields { grid-template-columns: 1fr; }
       .hero-grid, .features, .cycle-grid, .activity-grid, .theory-grid, .practice-grid, .closing-grid {
         grid-template-columns: 1fr;
       }
@@ -563,6 +596,10 @@
             <h3 style="margin:0;font-size:26px;">Reto detonador</h3>
             <p style="margin:0;color:var(--muted);font-weight:700;">Sin fórmula nueva al inicio</p>
           </div>
+        </div>
+        <div class="student-fields">
+          <input id="studentName" type="text" placeholder="Nombre completo del alumno">
+          <input id="studentGroup" type="text" placeholder="Grupo">
         </div>
         <div class="problem-box">
           <strong>8 vasos de fruta cuestan $120.</strong>
@@ -775,12 +812,117 @@
     </div>
   </section>
 
+  <section id="guardar" class="white-section">
+    <div class="container">
+      <div class="save-panel">
+        <span class="tag">Guardar evidencia</span>
+        <h2 style="margin-bottom:12px;">Enviar respuestas al maestro</h2>
+        <p class="section-subtitle">Cuando termines, revisa que tu nombre y grupo estén escritos. Después presiona el botón para guardar tus respuestas en Google Sheets.</p>
+        <button class="btn" onclick="submitToGoogleSheets()">Guardar respuestas en Google Sheets</button>
+        <button class="btn secondary" onclick="descargarRespaldo()">Descargar respaldo local</button>
+        <div id="saveStatus" class="save-status"></div>
+      </div>
+    </div>
+  </section>
+
   <footer>
     Unidad 5 · Matemáticas para el bienestar · Experiencia 2<br>
     Página educativa interactiva para trabajar tasas unitarias en contextos escolares.
   </footer>
 
   <script>
+    // 1) Pega aquí la URL de tu implementación de Google Apps Script.
+    // Debe terminar en /exec, por ejemplo:
+    // const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx.../exec';
+    const GOOGLE_SCRIPT_URL = 'PEGA_AQUI_TU_URL_DE_GOOGLE_APPS_SCRIPT';
+
+    function getValue(id) {
+      const element = document.getElementById(id);
+      return element ? element.value.trim() : '';
+    }
+
+    function getPracticeData() {
+      const cards = document.querySelectorAll('.practice-card');
+      return Array.from(cards).map((card, index) => {
+        const input = card.querySelector('input');
+        const title = card.querySelector('h3')?.textContent || `Ejercicio ${index + 1}`;
+        const expected = card.dataset.answer || '';
+        const answer = input ? input.value.trim() : '';
+        const correct = card.dataset.correct === 'true';
+        return { title, answer, expected, correct };
+      });
+    }
+
+    function getScore() {
+      return document.getElementById('score')?.textContent || '0';
+    }
+
+    function buildSubmissionPayload() {
+      const challengeResult = document.getElementById('challengeResult');
+      const practice = getPracticeData();
+      return {
+        timestamp: new Date().toISOString(),
+        nombre: getValue('studentName'),
+        grupo: getValue('studentGroup'),
+        primerIntento: getValue('ownStrategy'),
+        ideaCompartida: getValue('shareIdea'),
+        estrategiaElegida: getValue('chosenStrategy'),
+        significadoPorUno: getValue('meaning'),
+        practica: JSON.stringify(practice),
+        puntaje: `${getScore()} / 4`,
+        retoFinal: challengeResult && challengeResult.style.display !== 'none' ? challengeResult.textContent.trim() : '',
+        reflexion: getValue('reflection')
+      };
+    }
+
+    function showSaveStatus(message, isError = false) {
+      const status = document.getElementById('saveStatus');
+      status.textContent = message;
+      status.classList.toggle('error', isError);
+      status.style.display = 'block';
+    }
+
+    async function submitToGoogleSheets() {
+      const payload = buildSubmissionPayload();
+
+      if (!payload.nombre || !payload.grupo) {
+        showSaveStatus('Escribe tu nombre completo y grupo antes de guardar.', true);
+        return;
+      }
+
+      if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes('PEGA_AQUI')) {
+        showSaveStatus('Falta configurar la URL de Google Apps Script. Pide al maestro que la pegue en el archivo HTML.', true);
+        return;
+      }
+
+      try {
+        await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        localStorage.setItem('ultimoEnvioTasasUnitarias', JSON.stringify(payload));
+        showSaveStatus('Respuestas enviadas. También se guardó un respaldo local en este dispositivo.');
+      } catch (error) {
+        localStorage.setItem('respaldoTasasUnitarias', JSON.stringify(payload));
+        showSaveStatus('No se pudo conectar con Google Sheets. Se guardó un respaldo local en este dispositivo.', true);
+      }
+    }
+
+    function descargarRespaldo() {
+      const payload = buildSubmissionPayload();
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `respuestas_tasas_unitarias_${payload.nombre || 'alumno'}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
     function checkPractice(button) {
       const card = button.closest('.practice-card');
       const expected = Number(card.dataset.answer);
@@ -839,6 +981,8 @@
       result.style.display = 'none';
       result.classList.remove('correct');
       document.getElementById('score').textContent = '0';
+      const status = document.getElementById('saveStatus');
+      if (status) status.style.display = 'none';
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   </script>
