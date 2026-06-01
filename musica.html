@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moonwalk Math Tour | Actividad interactiva 6.º MYP</title>
+<style>
+  :root{
+    --bg:#090b1a;
+    --panel:#151a35;
+    --panel2:#202750;
+    --text:#f7f7ff;
+    --muted:#c7c9dc;
+    --gold:#ffd166;
+    --cyan:#59d8ff;
+    --pink:#ff6fae;
+    --green:#7be495;
+    --red:#ff7a7a;
+    --shadow:0 15px 40px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    min-height:100vh;
+    color:var(--text);
+    font-family:Inter,Segoe UI,Arial,sans-serif;
+    background:
+      radial-gradient(circle at 15% 12%, rgba(89,216,255,.19), transparent 23rem),
+      radial-gradient(circle at 85% 8%, rgba(255,111,174,.15), transparent 22rem),
+      linear-gradient(145deg,#080916,#10142e 55%,#080916);
+  }
+  body:before{
+    content:"";
+    position:fixed; inset:0; pointer-events:none; opacity:.33;
+    background-image:radial-gradient(#fff 1px,transparent 1px);
+    background-size:37px 37px;
+  }
+  .wrap{width:min(1100px,94%);margin:auto;padding:24px 0 48px;position:relative}
+  header{
+    display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;
+    background:linear-gradient(135deg,rgba(32,39,80,.96),rgba(16,20,46,.95));
+    border:1px solid rgba(255,255,255,.13);border-radius:26px;padding:24px;box-shadow:var(--shadow)
+  }
+  .tag{display:inline-block;background:rgba(255,209,102,.16);border:1px solid rgba(255,209,102,.45);
+    color:var(--gold);padding:7px 11px;border-radius:999px;font-size:.8rem;font-weight:800;letter-spacing:.06em}
+  h1{margin:12px 0 5px;font-size:clamp(2rem,5vw,4.4rem);line-height:.94}
+  h1 span{color:var(--gold)}
+  .subtitle{color:var(--muted);max-width:700px;line-height:1.5;margin:9px 0 0}
+  .vinyl{width:142px;height:142px;border-radius:50%;display:grid;place-items:center;
+    background:repeating-radial-gradient(circle,#202020 0 6px,#111 7px 10px);
+    border:5px solid rgba(255,255,255,.08);animation:spin 12s linear infinite;box-shadow:0 0 35px rgba(89,216,255,.25)}
+  .vinyl:before{content:"★";display:grid;place-items:center;width:47px;height:47px;border-radius:50%;
+    color:#14172f;background:var(--gold);font-size:1.25rem}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .topbar{display:grid;grid-template-columns:1fr 1fr auto;gap:12px;margin:16px 0}
+  .field,.scorebox,.progressbox{
+    background:rgba(21,26,53,.94);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:13px
+  }
+  label{font-size:.76rem;color:var(--muted);display:block;margin-bottom:6px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+  input,select{width:100%;font:inherit;padding:11px 12px;border-radius:10px;color:var(--text);
+    background:#0d1025;border:1px solid rgba(255,255,255,.18);outline:none}
+  input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(89,216,255,.14)}
+  .scorebox{min-width:155px;text-align:center}
+  .score{font-size:2rem;color:var(--gold);font-weight:900}
+  .progressbox{margin:0 0 16px}
+  .meter{height:13px;background:#090b1a;border-radius:999px;overflow:hidden;border:1px solid rgba(255,255,255,.08)}
+  #bar{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--pink),var(--gold));transition:width .4s}
+  .tiny{font-size:.8rem;color:var(--muted);line-height:1.45}
+  .instructions{display:grid;grid-template-columns:1.4fr .8fr;gap:16px;background:rgba(21,26,53,.94);
+    border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:17px;margin-bottom:16px}
+  .instructions h2,.stage h2{margin:0 0 8px}
+  .instructions p{margin:0;color:var(--muted);line-height:1.5}
+  .playlist{border-left:2px dashed rgba(255,209,102,.55);padding-left:14px}
+  .playlist strong{color:var(--gold)}
+  .stage{background:rgba(21,26,53,.96);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:18px;margin:14px 0;box-shadow:var(--shadow)}
+  .stage-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .badge{font-size:.75rem;font-weight:900;color:#10142e;background:var(--cyan);padding:7px 9px;border-radius:999px;white-space:nowrap}
+  .stage p{color:var(--muted);line-height:1.48}
+  .question{background:#10142e;border:1px solid rgba(255,255,255,.1);border-radius:15px;padding:15px;margin:11px 0}
+  .question p{color:var(--text);font-weight:650;margin:0 0 10px}
+  .options{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+  button{font:inherit;font-weight:850;border:0;border-radius:11px;padding:11px 14px;cursor:pointer;transition:.2s}
+  button:hover{transform:translateY(-2px)}
+  .option{background:#252d5b;color:var(--text);border:1px solid rgba(255,255,255,.12)}
+  .option:hover{border-color:var(--cyan)}
+  .primary{background:linear-gradient(135deg,var(--gold),#ffb347);color:#202020}
+  .secondary{background:#252d5b;color:var(--text);border:1px solid rgba(255,255,255,.13)}
+  .feedback{min-height:22px;margin:8px 0 0;font-weight:800;font-size:.92rem}
+  .ok{color:var(--green)} .bad{color:var(--red)}
+  .inline{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .inline input{max-width:190px}
+  .locked{opacity:.68}
+  .finale{text-align:center;background:linear-gradient(140deg,rgba(32,39,80,.98),rgba(21,26,53,.98));
+    border:1px solid rgba(255,209,102,.45);border-radius:22px;padding:22px;margin-top:16px}
+  .finale h2{font-size:2rem;margin:4px}
+  #summary{display:none}
+  .results{white-space:pre-wrap;text-align:left;color:var(--muted);background:#0d1025;border-radius:14px;padding:14px;line-height:1.55}
+  .footer{font-size:.76rem;color:var(--muted);line-height:1.5;text-align:center;margin-top:18px}
+  .footer a{color:var(--cyan)}
+  .confetti{font-size:1.5rem;letter-spacing:.25rem}
+  @media(max-width:730px){
+    header{grid-template-columns:1fr}.vinyl{display:none}.topbar{grid-template-columns:1fr}.instructions{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <span class="tag">6.º MYP · MATEMÁTICAS · ACTIVIDAD INDIVIDUAL</span>
+      <h1>Moonwalk <span>Math Tour</span></h1>
+      <p class="subtitle">Una gira matemática inspirada en la música de Michael Jackson. Supera cinco estaciones para completar tu pase backstage. No necesitas escuchar canciones ni conocer previamente al artista.</p>
+    </div>
+    <div class="vinyl" aria-label="Disco de vinilo decorativo"></div>
+  </header>
+
+  <section class="topbar">
+    <div class="field"><label for="student">Nombre del alumno</label><input id="student" placeholder="Escribe tu nombre"></div>
+    <div class="field"><label for="group">Grupo</label><input id="group" placeholder="Ejemplo: 6A"></div>
+    <div class="scorebox"><label>Puntaje</label><div class="score"><span id="score">0</span>/100</div></div>
+  </section>
+
+  <section class="progressbox">
+    <label>Progreso de la gira</label>
+    <div class="meter"><div id="bar"></div></div>
+    <p class="tiny" id="progressText">0 de 10 retos completados</p>
+  </section>
+
+  <section class="instructions">
+    <div>
+      <h2>🎧 Tu misión</h2>
+      <p>Resuelve cada reto. Lee con atención, realiza tus operaciones y selecciona o escribe tu respuesta. Recibirás retroalimentación inmediata. Cada respuesta correcta vale <strong>10 puntos</strong>.</p>
+    </div>
+    <div class="playlist">
+      <strong>Playlist temática</strong>
+      <p class="tiny">Thriller · Beat It · Billie Jean · Bad · Smooth Criminal · Black or White</p>
+    </div>
+  </section>
+
+  <section class="stage">
+    <div class="stage-head"><h2>🎵 Estación 1. Ritmo y patrones</h2><span class="badge">SECUENCIAS</span></div>
+    <p>Un ensayo de baile se organiza por conteos. Identifica la regla y encuentra el siguiente número.</p>
+    <div class="question" data-id="q1">
+      <p>1. En la práctica de una coreografía se repite el patrón: 8, 16, 24, 32, ___</p>
+      <div class="options">
+        <button class="option" onclick="answerChoice('q1',40,this)">40</button>
+        <button class="option" onclick="answerChoice('q1',36,this)">36</button>
+        <button class="option" onclick="answerChoice('q1',42,this)">42</button>
+      </div><div class="feedback" id="f-q1"></div>
+    </div>
+    <div class="question" data-id="q2">
+      <p>2. Las luces del escenario siguen el patrón: 3, 6, 12, 24, ___</p>
+      <div class="options">
+        <button class="option" onclick="answerChoice('q2',48,this)">48</button>
+        <button class="option" onclick="answerChoice('q2',30,this)">30</button>
+        <button class="option" onclick="answerChoice('q2',36,this)">36</button>
+      </div><div class="feedback" id="f-q2"></div>
+    </div>
+  </section>
+
+  <section class="stage">
+    <div class="stage-head"><h2>💿 Estación 2. El álbum Thriller</h2><span class="badge">FRACCIONES</span></div>
+    <p>El álbum <em>Thriller</em> contiene 9 pistas. Usa ese dato para responder.</p>
+    <div class="question" data-id="q3">
+      <p>3. Si seleccionas 3 de sus 9 pistas para una actividad, ¿qué fracción simplificada representa la selección?</p>
+      <div class="options">
+        <button class="option" onclick="answerChoice('q3','1/3',this)">1/3</button>
+        <button class="option" onclick="answerChoice('q3','3/6',this)">3/6</button>
+        <button class="option" onclick="answerChoice('q3','2/3',this)">2/3</button>
+      </div><div class="feedback" id="f-q3"></div>
+    </div>
+    <div class="question" data-id="q4">
+      <p>4. Si ya escuchaste 6 de las 9 pistas, ¿qué fracción simplificada falta por escuchar?</p>
+      <div class="options">
+        <button class="option" onclick="answerChoice('q4','1/3',this)">1/3</button>
+        <button class="option" onclick="answerChoice('q4','2/3',this)">2/3</button>
+        <button class="option" onclick="answerChoice('q4','1/6',this)">1/6</button>
+      </div><div class="feedback" id="f-q4"></div>
+    </div>
+  </section>
+
+  <section class="stage">
+    <div class="stage-head"><h2>🎟️ Estación 3. Producción del concierto</h2><span class="badge">OPERACIONES</span></div>
+    <p>Organiza algunos recursos ficticios para el montaje de un espectáculo escolar.</p>
+    <div class="question" data-id="q5">
+      <p>5. Hay 18 filas con 24 asientos cada una. ¿Cuántos lugares hay en total?</p>
+      <div class="inline"><input id="i-q5" inputmode="numeric" placeholder="Escribe el total"><button class="primary" onclick="answerInput('q5')">Comprobar</button></div>
+      <div class="feedback" id="f-q5"></div>
+    </div>
+    <div class="question" data-id="q6">
+      <p>6. Se colocan 480 pulseras luminosas en 12 cajas iguales. ¿Cuántas pulseras van en cada caja?</p>
+      <div class="inline"><input id="i-q6" inputmode="numeric" placeholder="Escribe el resultado"><button class="primary" onclick="answerInput('q6')">Comprobar</button></div>
+      <div class="feedback" id="f-q6"></div>
+    </div>
+  </section>
+
+  <section class="stage">
+    <div class="stage-head"><h2>✨ Estación 4. Efectos especiales</h2><span class="badge">PORCENTAJES</span></div>
+    <p>Calcula porcentajes sencillos para preparar la iluminación del show.</p>
+    <div class="question" data-id="q7">
+      <p>7. De 200 luces, el 25% se utiliza para la entrada. ¿Cuántas luces son?</p>
+      <div class="options">
+        <button class="option" onclick="answerChoice('q7',50,this)">50</button>
+        <button class="option" onclick="answerChoice('q7',25,this)">25</button>
+        <button class="option" onclick="answerChoice('q7',75,this)">75</button>
+      </div><div class="feedback" id="f-q7"></div>
+    </div>
+    <div class="question" data-id="q8">
+      <p>8. El 10% de 350 entradas se reserva para invitados. ¿Cuántas entradas son?</p>
+      <div class="inline"><input id="i-q8" inputmode="numeric" placeholder="Escribe el resultado"><button class="primary" onclick="answerInput('q8')">Comprobar</button></div>
+      <div class="feedback" id="f-q8"></div>
+    </div>
+  </section>
+
+  <section class="stage">
+    <div class="stage-head"><h2>🌟 Estación 5. Reto backstage</h2><span class="badge">PROBLEMAS</span></div>
+    <p>Combina lo aprendido para finalizar la gira.</p>
+    <div class="question" data-id="q9">
+      <p>9. Una secuencia de baile dura 4 minutos. Se presentan 6 secuencias y hay 3 minutos de pausa en total. ¿Cuánto dura el bloque completo?</p>
+      <div class="options">
+        <button class="option" onclick="answerChoice('q9',27,this)">27 minutos</button>
+        <button class="option" onclick="answerChoice('q9',24,this)">24 minutos</button>
+        <button class="option" onclick="answerChoice('q9',30,this)">30 minutos</button>
+      </div><div class="feedback" id="f-q9"></div>
+    </div>
+    <div class="question" data-id="q10">
+      <p>10. Una pantalla tiene 8 filas con 15 focos. Durante una escena se enciende la mitad. ¿Cuántos focos se encienden?</p>
+      <div class="inline"><input id="i-q10" inputmode="numeric" placeholder="Escribe el resultado"><button class="primary" onclick="answerInput('q10')">Comprobar</button></div>
+      <div class="feedback" id="f-q10"></div>
+    </div>
+  </section>
+
+  <section class="finale">
+    <div class="confetti">✦ ★ ✧ ★ ✦</div>
+    <h2>Final de la gira</h2>
+    <p class="tiny">Completa los diez retos y genera tu pase backstage con el resumen de resultados.</p>
+    <div class="inline" style="justify-content:center">
+      <button class="primary" onclick="finish()">Generar pase backstage</button>
+      <button class="secondary" onclick="resetTour()">Reiniciar actividad</button>
+    </div>
+    <div id="summary">
+      <h3 id="resultTitle"></h3>
+      <div class="results" id="resultText"></div>
+      <div class="inline" style="justify-content:center;margin-top:12px">
+        <button class="primary" onclick="downloadResults()">Descargar resultados</button>
+        <button class="secondary" onclick="copyResults()">Copiar resultados</button>
+      </div>
+    </div>
+  </section>
+
+  <p class="footer">Actividad educativa no oficial. Los nombres de pistas se utilizan únicamente como contexto cultural. La lista de 9 pistas de <em>Thriller</em> y la selección de títulos se consultaron en el sitio oficial de Michael Jackson:
+    <a href="https://www.michaeljackson.com/albums/thriller/" target="_blank" rel="noopener">Thriller</a> y
+    <a href="https://www.michaeljackson.com/albums/number-ones/" target="_blank" rel="noopener">Number Ones</a>.
+  </p>
+</div>
+
+<script>
+const correct = {q1:40,q2:48,q3:"1/3",q4:"1/3",q5:432,q6:40,q7:50,q8:35,q9:27,q10:60};
+const explanations = {
+ q1:"La regla es sumar 8 en cada paso.",
+ q2:"La regla es multiplicar por 2.",
+ q3:"3/9 se simplifica dividiendo numerador y denominador entre 3.",
+ q4:"Faltan 3 de 9 pistas: 3/9 = 1/3.",
+ q5:"18 × 24 = 432.",
+ q6:"480 ÷ 12 = 40.",
+ q7:"25% es la cuarta parte: 200 ÷ 4 = 50.",
+ q8:"10% es la décima parte: 350 ÷ 10 = 35.",
+ q9:"6 × 4 = 24; después suma 3 minutos de pausa: 27.",
+ q10:"8 × 15 = 120; la mitad de 120 es 60."
+};
+let state = {};
+
+function isAnswered(id){ return Object.prototype.hasOwnProperty.call(state,id); }
+function normalize(v){ return typeof v === "string" ? v.trim().toLowerCase().replace(/\s/g,"") : v; }
+
+function lockQuestion(id){
+  document.querySelectorAll(`[data-id="${id}"] button.option`).forEach(b=>{b.disabled=true;b.classList.add("locked")});
+  const input=document.getElementById("i-"+id);
+  if(input) input.disabled=true;
+}
+function setFeedback(id,ok){
+  const box=document.getElementById("f-"+id);
+  box.className="feedback "+(ok?"ok":"bad");
+  box.textContent=(ok?"✓ Correcto. ":"✦ Revisa tu procedimiento. ")+explanations[id];
+}
+function updateUI(){
+  const answered=Object.keys(state).length;
+  const points=Object.values(state).filter(Boolean).length*10;
+  document.getElementById("score").textContent=points;
+  document.getElementById("bar").style.width=(answered*10)+"%";
+  document.getElementById("progressText").textContent=`${answered} de 10 retos completados`;
+}
+function answerChoice(id,value,btn){
+  if(isAnswered(id)) return;
+  const ok=normalize(value)===normalize(correct[id]);
+  state[id]=ok; lockQuestion(id); setFeedback(id,ok); updateUI();
+}
+function answerInput(id){
+  if(isAnswered(id)) return;
+  const el=document.getElementById("i-"+id);
+  if(!el.value.trim()){ document.getElementById("f-"+id).textContent="Escribe una respuesta antes de comprobar."; return; }
+  const val=Number(el.value.replace(",","."));
+  const ok=val===correct[id];
+  state[id]=ok; lockQuestion(id); setFeedback(id,ok); updateUI();
+}
+function buildReport(){
+  const student=document.getElementById("student").value.trim()||"Sin nombre";
+  const group=document.getElementById("group").value.trim()||"Sin grupo";
+  const answered=Object.keys(state).length;
+  const points=Object.values(state).filter(Boolean).length*10;
+  const level=points>=90?"Encore extraordinario":points>=70?"Gran presentación":points>=50?"Buen ensayo; sigue practicando":"Necesitas repasar algunos pasos";
+  return `MOONWALK MATH TOUR · PASE BACKSTAGE
+Alumno: ${student}
+Grupo: ${group}
+Puntaje: ${points}/100
+Retos completados: ${answered}/10
+Resultado: ${level}
+
+Detalle:
+${Object.keys(correct).map((id,i)=>`${i+1}. ${state[id]===true?"Correcto":state[id]===false?"Necesita revisión":"Sin responder"}`).join("\n")}
+
+Actividad matemática para 6.º MYP.`;
+}
+function finish(){
+  const answered=Object.keys(state).length;
+  if(answered<10){
+    alert(`Todavía faltan ${10-answered} reto(s). Completa todas las estaciones antes de generar tu pase.`);
+    return;
+  }
+  const points=Object.values(state).filter(Boolean).length*10;
+  document.getElementById("summary").style.display="block";
+  document.getElementById("resultTitle").textContent=points>=70?"🎉 ¡Pase backstage desbloqueado!":"🎧 Pase de práctica generado";
+  document.getElementById("resultText").textContent=buildReport();
+  document.getElementById("summary").scrollIntoView({behavior:"smooth"});
+}
+function downloadResults(){
+  const blob=new Blob([buildReport()],{type:"text/plain;charset=utf-8"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download="Resultados_Moonwalk_Math_Tour.txt"; a.click(); URL.revokeObjectURL(a.href);
+}
+async function copyResults(){
+  try{await navigator.clipboard.writeText(buildReport()); alert("Resultados copiados.");}
+  catch{alert("No se pudo copiar automáticamente. Selecciona el texto del resumen.");}
+}
+function resetTour(){ location.reload(); }
+</script>
+</body>
+</html>
