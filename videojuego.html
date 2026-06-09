@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guardianes de la Feria del Bienestar</title>
+<style>
+:root{
+  --bg:#f4fbf8;--ink:#11302d;--muted:#5b7773;--teal:#0f766e;--teal2:#14b8a6;
+  --green:#16a34a;--yellow:#fbbf24;--orange:#f97316;--pink:#ec4899;--blue:#0ea5e9;
+  --purple:#7c3aed;--red:#dc2626;--card:#ffffff;--line:#d9ebe7;--shadow:0 18px 45px rgba(15,118,110,.14);
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(circle at 10% 10%,#dcfce7 0,transparent 28%),radial-gradient(circle at 90% 12%,#fef3c7 0,transparent 24%),linear-gradient(180deg,#f7fffd,#effaf7);color:var(--ink);min-height:100vh}
+button,input,textarea{font:inherit}.hidden{display:none!important}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.topbar-inner{max-width:1250px;margin:auto;padding:12px 18px;display:flex;gap:15px;align-items:center;justify-content:space-between}
+.brand{display:flex;gap:10px;align-items:center}.brand-icon{width:46px;height:46px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,var(--teal),var(--teal2));font-size:25px;color:white;box-shadow:var(--shadow)}
+.brand b{display:block}.brand small{color:var(--muted)}
+.stats{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}.stat{background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 11px;font-size:13px;font-weight:800;white-space:nowrap}.stat strong{color:var(--teal)}
+.wrap{max-width:1250px;margin:auto;padding:26px 18px 70px}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:20px;align-items:stretch}.hero-card,.panel{background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:30px;box-shadow:var(--shadow)}
+.hero-main{padding:30px}.badge{display:inline-block;background:#ccfbf1;color:#115e59;border-radius:999px;padding:7px 12px;font-weight:900;font-size:13px;letter-spacing:.02em}.hero h1{font-size:clamp(40px,6vw,72px);line-height:.98;margin:14px 0 12px;letter-spacing:-.06em}.hero h1 span{color:var(--teal)}.hero p{color:var(--muted);font-size:18px;line-height:1.6}.hero-side{padding:24px;background:linear-gradient(145deg,#0f766e,#115e59);color:white;position:relative;overflow:hidden}.hero-side:after{content:"";position:absolute;right:-45px;bottom:-45px;width:165px;height:165px;border-radius:50%;background:rgba(255,255,255,.1)}
+.quest-title{display:flex;gap:14px;align-items:center}.quest-icon{width:60px;height:60px;display:grid;place-items:center;border-radius:22px;background:rgba(255,255,255,.14);font-size:32px}.hero-side ul{padding-left:19px;line-height:1.75}.hero-side b{color:#fde68a}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}.btn{border:0;border-radius:16px;padding:12px 16px;font-weight:900;cursor:pointer;transition:.2s;background:var(--teal);color:white;box-shadow:0 8px 16px rgba(15,118,110,.18)}.btn:hover{transform:translateY(-2px)}.btn.secondary{background:#fff;color:var(--teal);border:1px solid var(--line);box-shadow:none}.btn.yellow{background:var(--yellow);color:#713f12}.btn.purple{background:var(--purple)}.btn.red{background:var(--red)}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.player-form{margin-top:18px;padding:18px;background:#fff;border:1px solid var(--line);border-radius:22px}.form-grid{display:grid;grid-template-columns:1fr 150px;gap:10px}.player-form input,.reflection textarea{width:100%;border:1px solid var(--line);border-radius:14px;padding:12px;background:#fbfffe;outline:none}.player-form input:focus,.reflection textarea:focus{border-color:var(--teal2);box-shadow:0 0 0 4px rgba(20,184,166,.15)}
+.map{margin-top:25px;padding:24px}.section-head{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}.section-head h2{margin:0;font-size:28px}.section-head p{margin:2px 0 0;color:var(--muted)}
+.level-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:20px}.level-card{position:relative;background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px;min-height:195px;transition:.2s}.level-card:hover{transform:translateY(-3px);box-shadow:0 12px 25px rgba(15,118,110,.12)}.level-card.locked{filter:grayscale(1);opacity:.66}.level-card.secret{background:linear-gradient(145deg,#faf5ff,#ede9fe);border-color:#c4b5fd}.lvl-icon{font-size:34px}.lvl-num{font-size:12px;font-weight:900;color:var(--teal);margin-top:6px}.lvl-title{font-size:20px;font-weight:950;margin:4px 0}.lvl-desc{color:var(--muted);font-size:14px;line-height:1.45}.lvl-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:13px}.mini{font-size:12px;font-weight:900;padding:5px 8px;border-radius:999px;background:#ecfdf5;color:#166534}.locked .mini{background:#f1f5f9;color:#64748b}
+.collectibles{margin-top:20px;padding:22px}.collection-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:14px}.collect{display:grid;place-items:center;text-align:center;padding:12px 4px;border:1px dashed #b9d9d3;border-radius:18px;background:#fbfffe}.collect .emoji{font-size:31px;filter:grayscale(1);opacity:.28}.collect.earned .emoji{filter:none;opacity:1;animation:bounce .8s ease}.collect b{display:block;font-size:11px;margin-top:5px}.collect small{color:var(--muted);font-size:10px}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.modal{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:14px;background:rgba(15,23,42,.64);backdrop-filter:blur(8px)}.modal-card{width:min(940px,100%);max-height:94vh;overflow:auto;background:white;border-radius:30px;border:1px solid var(--line);box-shadow:0 24px 75px rgba(0,0,0,.28)}.modal-head{position:sticky;top:0;z-index:3;background:linear-gradient(135deg,var(--teal),#115e59);color:white;padding:18px 20px;display:flex;gap:10px;align-items:center;justify-content:space-between}.modal-head h2{font-size:23px;margin:0}.modal-body{padding:20px}.progress{height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin:12px 0 18px}.progress span{height:100%;display:block;background:linear-gradient(90deg,var(--yellow),var(--orange));transition:.35s;width:0}.question-card{background:#fbfffe;border:1px solid var(--line);border-radius:22px;padding:18px}.question-label{font-size:12px;font-weight:900;color:var(--teal);text-transform:uppercase;letter-spacing:.08em}.question-card h3{font-size:22px;margin:8px 0 15px;line-height:1.35}.options{display:grid;grid-template-columns:1fr 1fr;gap:10px}.option{border:2px solid var(--line);background:white;color:var(--ink);border-radius:16px;padding:12px;text-align:left;font-weight:800;cursor:pointer;transition:.2s}.option:hover{border-color:var(--teal2);background:#f0fdfa}.option.selected{border-color:var(--teal);background:#ccfbf1}.option.correct{border-color:var(--green);background:#dcfce7}.option.wrong{border-color:var(--red);background:#fee2e2}.feedback{display:none;margin-top:13px;padding:13px;border-radius:16px;font-weight:750}.feedback.ok{background:#dcfce7;color:#166534;border:1px solid #bbf7d0}.feedback.bad{background:#fff7ed;color:#9a3412;border:1px solid #fed7aa}.help{margin-top:14px;background:#fefce8;border:1px solid #fde68a;border-radius:18px;padding:14px}.help h4{margin:0 0 5px;color:#854d0e}.help p{margin:0;color:#92400e}.help.hidden{display:none!important}.modal-actions{display:flex;gap:9px;justify-content:space-between;flex-wrap:wrap;margin-top:16px}.tutorial-step{display:none}.tutorial-step.active{display:block}.tutorial-illustration{font-size:70px;text-align:center;margin:10px}.tutorial-box{background:#f0fdfa;border:1px solid #99f6e4;border-radius:22px;padding:18px}.award{text-align:center;padding:10px}.award-emoji{font-size:92px;animation:bounce 1s ease infinite}.award h3{font-size:32px;margin:6px}.award p{color:var(--muted);font-size:17px}.award .prize{display:inline-block;padding:8px 13px;background:#fef3c7;color:#92400e;border-radius:999px;font-weight:900}
+.report{margin-top:20px;padding:24px}.report-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.report-box{border:1px solid var(--line);background:#fbfffe;padding:16px;border-radius:18px}.report-box h3{margin:0 0 8px}.reflection textarea{min-height:96px}.footer{margin-top:25px;padding:16px;text-align:center;color:var(--muted);font-size:13px}
+.spark{position:fixed;pointer-events:none;font-size:22px;animation:fly 1s ease forwards;z-index:200}@keyframes fly{0%{transform:translateY(0) scale(.6);opacity:1}100%{transform:translateY(-110px) scale(1.5);opacity:0}}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.level-grid{grid-template-columns:repeat(2,1fr)}.collection-grid{grid-template-columns:repeat(3,1fr)}.options{grid-template-columns:1fr}.report-grid{grid-template-columns:1fr}}@media(max-width:540px){.level-grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.topbar-inner{align-items:flex-start}.stats{gap:5px}.stat{font-size:11px;padding:6px 8px}.wrap{padding-left:12px;padding-right:12px}.hero-main,.hero-side{padding:20px}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><div class="brand-icon">🌱</div><div><b>Guardianes de la Feria</b><small>Videojuego individual · Unidad 5</small></div></div>
+    <div class="stats">
+      <div class="stat">⭐ Puntos: <strong id="scoreTop">0</strong></div>
+      <div class="stat">👑 Coronas: <strong id="crownsTop">0</strong></div>
+      <div class="stat">🏆 Copas: <strong id="cupsTop">0</strong></div>
+      <div class="stat">🎒 Objetos: <strong id="itemsTop">0</strong>/6</div>
+    </div>
+  </div>
+</header>
+<main class="wrap">
+  <section class="hero">
+    <div class="hero-card hero-main">
+      <span class="badge">🎮 MISIÓN MATEMÁTICA</span>
+      <h1>Guardianes de la <span>Feria del Bienestar</span></h1>
+      <p>La feria escolar necesita un comité experto. Supera retos de <b>razones</b>, <b>proporciones equivalentes</b> y <b>tasas unitarias</b>. Colecciona recursos saludables, gana coronas y desbloquea la cámara secreta.</p>
+      <div class="player-form">
+        <div class="form-grid">
+          <input id="studentName" placeholder="Nombre completo del alumno" autocomplete="name">
+          <input id="studentGroup" placeholder="Grupo">
+        </div>
+        <div class="actions"><button class="btn yellow" onclick="openTutorial()">▶ Comenzar tutorial</button><button class="btn secondary" onclick="resetGame()">↻ Reiniciar progreso</button></div>
+      </div>
+    </div>
+    <aside class="hero-card hero-side">
+      <div class="quest-title"><div class="quest-icon">🧭</div><div><h2 style="margin:0">Tu misión</h2><small>Comité organizador de la feria</small></div></div>
+      <ul>
+        <li>Completa el <b>tutorial</b>.</li>
+        <li>Supera los niveles <b>1 al 5</b>.</li>
+        <li>Usa ayudas cuando el reto lo requiera.</li>
+        <li>Desbloquea el <b>nivel oculto</b>.</li>
+        <li>Descarga tu reporte final en <b>.docx</b>.</li>
+      </ul>
+    </aside>
+  </section>
+
+  <section class="panel map">
+    <div class="section-head"><div><h2>🗺️ Mapa de niveles</h2><p>La dificultad aumenta gradualmente. Cada nivel otorga una recompensa.</p></div><span class="badge" id="mapStatus">Tutorial pendiente</span></div>
+    <div class="level-grid" id="levelGrid"></div>
+  </section>
+
+  <section class="panel collectibles">
+    <div class="section-head"><div><h2>🎒 Colección del bienestar</h2><p>Reúne los seis objetos esenciales de la feria.</p></div></div>
+    <div class="collection-grid" id="collectionGrid"></div>
+  </section>
+
+  <section class="panel report">
+    <div class="section-head"><div><h2>📄 Evidencia final</h2><p>Descarga un documento Word con tu desempeño para enviarlo como evidencia.</p></div></div>
+    <div class="report-grid" style="margin-top:14px">
+      <div class="report-box"><h3>Resumen de progreso</h3><p id="reportSummary">Completa el tutorial y empieza tu aventura.</p></div>
+      <div class="report-box reflection"><h3>Reflexión del alumno</h3><textarea id="reflection" placeholder="Escribe qué estrategia te ayudó más y cómo usarías las tasas unitarias para tomar una decisión en la vida real."></textarea></div>
+    </div>
+    <div class="actions"><button class="btn purple" id="downloadBtn" onclick="downloadDocxReport()" disabled>⬇ Descargar reporte .docx</button><button class="btn secondary" onclick="saveProgress()">💾 Guardar avance en este dispositivo</button></div>
+  </section>
+  <div class="footer">Unidad 5 · Matemáticas para el bienestar · Razones, proporciones equivalentes y tasas unitarias</div>
+</main>
+
+<div class="modal hidden" id="tutorialModal">
+  <div class="modal-card">
+    <div class="modal-head"><h2>🎓 Tutorial del comité</h2><button class="btn secondary" onclick="closeModal('tutorialModal')">Cerrar</button></div>
+    <div class="modal-body">
+      <div class="tutorial-step active"><div class="tutorial-illustration">🧺🥤</div><div class="tutorial-box"><h3>1. Observa el contexto</h3><p>Los retos se relacionan con la Feria Escolar de Bienestar: alimentos, hidratación, materiales y actividades deportivas.</p></div></div>
+      <div class="tutorial-step"><div class="tutorial-illustration">🔎</div><div class="tutorial-box"><h3>2. Lee con atención</h3><p>Cada pregunta tiene cuatro opciones. Solo una es correcta. Identifica qué se compara y conserva el orden de las cantidades.</p></div></div>
+      <div class="tutorial-step"><div class="tutorial-illustration">💡</div><div class="tutorial-box"><h3>3. Usa las ayudas</h3><p>En los niveles más difíciles aparecerán pistas. También puedes presionar <b>Solicitar ayuda</b>. Una ayuda no elimina tus puntos: está para ayudarte a aprender.</p></div></div>
+      <div class="tutorial-step"><div class="tutorial-illustration">👑🏆</div><div class="tutorial-box"><h3>4. Colecciona recompensas</h3><p>Al superar cada nivel recibirás una corona o copa y un objeto esencial. Completa los primeros cinco niveles para abrir el nivel oculto.</p></div></div>
+      <div class="tutorial-step"><div class="tutorial-illustration">📄</div><div class="tutorial-box"><h3>5. Entrega tu evidencia</h3><p>Al terminar, escribe tu reflexión y descarga un reporte bonito en formato <b>.docx</b>.</p></div></div>
+      <div class="modal-actions"><button class="btn secondary" id="tutorialPrev" onclick="tutorialPrev()">← Atrás</button><button class="btn" id="tutorialNext" onclick="tutorialNext()">Siguiente →</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal hidden" id="levelModal">
+  <div class="modal-card">
+    <div class="modal-head"><h2 id="modalLevelTitle">Nivel</h2><button class="btn secondary" onclick="closeModal('levelModal')">Salir</button></div>
+    <div class="modal-body">
+      <div class="progress"><span id="questionProgress"></span></div>
+      <div id="questionArea"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const ITEMS=[
+ {emoji:'🥗',name:'Ensalada energética',desc:'Razones'},
+ {emoji:'🎟️',name:'Boleto dorado',desc:'Proporciones'},
+ {emoji:'🥤',name:'Vaso hidratante',desc:'Tasas unitarias'},
+ {emoji:'⚽',name:'Balón de equipo',desc:'Eficiencia'},
+ {emoji:'🧭',name:'Brújula lógica',desc:'Decisiones'},
+ {emoji:'💎',name:'Cristal secreto',desc:'Reto extra'}
+];
+const LEVELS=[
+ {id:1,title:'Mercado de las razones',icon:'🥗',desc:'Reconoce y simplifica razones en alimentos y materiales.',award:'👑',item:0,help:'Recuerda: divide las dos cantidades entre el mismo número.',questions:[
+  {q:'En el puesto hay 18 ensaladas y 12 jugos. ¿Cuál es la razón simplificada de ensaladas a jugos?',o:['2:3','3:2','18:6','6:12'],a:1,e:'18:12 se simplifica dividiendo ambas cantidades entre 6: 3:2.'},
+  {q:'Hay 20 pelotas de fútbol y 15 de básquetbol. ¿Qué razón representa fútbol:básquetbol de forma simplificada?',o:['3:4','4:3','5:4','20:3'],a:1,e:'20:15 se divide entre 5. La razón simplificada es 4:3.'},
+  {q:'¿Qué significa la razón 3:2 en el contexto de ensaladas y jugos?',o:['Hay 3 productos en total','Por cada 3 ensaladas hay 2 jugos','Por cada 2 ensaladas hay 3 jugos','Faltan 2 ensaladas'],a:1,e:'Una razón conserva el orden: ensaladas primero, jugos después.'}
+ ]},
+ {id:2,title:'Jardín de proporciones',icon:'🌿',desc:'Completa patrones y tablas de razones equivalentes.',award:'👑',item:1,help:'Escala las dos cantidades por el mismo factor.',questions:[
+  {q:'Por cada 3 boletos vendidos se recaudan $15. ¿Cuánto se recauda con 12 boletos?',o:['$30','$45','$60','$75'],a:2,e:'12 es 4 veces 3; entonces 15 × 4 = 60.'},
+  {q:'Por cada 5 manzanas hay 2 plátanos. ¿Cuántos plátanos corresponden a 20 manzanas?',o:['4','6','8','10'],a:2,e:'20 es 4 veces 5; entonces 2 × 4 = 8.'},
+  {q:'¿Cuál tabla conserva la relación 4 jugadores : 6 conos?',o:['8 jugadores : 10 conos','12 jugadores : 18 conos','16 jugadores : 20 conos','20 jugadores : 24 conos'],a:1,e:'4:6 multiplicado por 3 produce 12:18.'}
+ ]},
+ {id:3,title:'Ruta de las tasas unitarias',icon:'🥤',desc:'Encuentra cuánto corresponde a una sola unidad.',award:'👑',item:2,help:'Para encontrar “por 1”, divide el total entre el número de unidades.',questions:[
+  {q:'Un paquete de 6 vasos de fruta cuesta $90. ¿Cuál es el costo por vaso?',o:['$12','$15','$18','$24'],a:1,e:'90 ÷ 6 = 15 pesos por vaso.'},
+  {q:'En 8 minutos participan 24 estudiantes. ¿Cuántos estudiantes participan por minuto?',o:['2','3','4','8'],a:1,e:'24 ÷ 8 = 3 estudiantes por minuto.'},
+  {q:'Con 5 litros se preparan 30 vasos de agua de fruta. ¿Cuántos vasos se obtienen por litro?',o:['5','6','25','35'],a:1,e:'30 ÷ 5 = 6 vasos por litro.'}
+ ]},
+ {id:4,title:'Arena de la eficiencia',icon:'⚽',desc:'Compara tasas unitarias y elige la opción más conveniente.',award:'🏆',item:3,help:'Calcula cada opción por separado. Luego compara resultados con sus unidades.',questions:[
+  {q:'Paquete A: 8 jugos por $120. Paquete B: 10 jugos por $140. ¿Cuál conviene por precio unitario?',o:['Paquete A: $15 por jugo','Paquete B: $14 por jugo','Empate: $15 por jugo','No se puede saber'],a:1,e:'A: 120÷8=15. B: 140÷10=14. Conviene B.'},
+  {q:'Circuito A: 32 estudiantes en 8 minutos. Circuito B: 45 estudiantes en 15 minutos. ¿Cuál atiende más estudiantes por minuto?',o:['Circuito A','Circuito B','Empate','No hay datos suficientes'],a:0,e:'A: 32÷8=4. B: 45÷15=3. Atiende más el circuito A.'},
+  {q:'Opción A: 18 barras por $270. Opción B: 20 barras por $280. ¿Qué decisión es correcta?',o:['Conviene A: $12 por barra','Conviene A: $15 por barra','Conviene B: $14 por barra','Empate: $14 por barra'],a:2,e:'A: 270÷18=15. B: 280÷20=14. Conviene B.'}
+ ]},
+ {id:5,title:'Gran Feria del bienestar',icon:'🎪',desc:'Integra razones, proporciones y tasas en decisiones reales.',award:'🏆',item:4,help:'Subraya qué se pide. Elige si necesitas simplificar una razón, escalar una proporción o dividir para hallar una tasa unitaria.',questions:[
+  {q:'En un puesto hay 30 ensaladas y 20 jugos. Si el comité mantiene la relación 3:2 y prepara 45 ensaladas, ¿cuántos jugos necesita?',o:['25','30','35','40'],a:1,e:'45 es 15 veces 3. Entonces 2 × 15 = 30 jugos.'},
+  {q:'La feria dura 2 horas. Un circuito atiende 8 estudiantes cada 10 minutos. ¿Cuántos estudiantes pueden participar si se repite sin pausas?',o:['48','64','80','96'],a:3,e:'2 horas = 120 min. Hay 12 rondas de 10 min. 12 × 8 = 96 estudiantes.'},
+  {q:'El comité necesita 60 vasos. Opción A: 5 litros producen 30 vasos. Opción B: 8 litros producen 56 vasos. ¿Cuál opción produce más vasos por litro?',o:['Opción A: 6 vasos/L','Opción B: 7 vasos/L','Ambas: 6 vasos/L','No se puede comparar'],a:1,e:'A:30÷5=6 vasos/L. B:56÷8=7 vasos/L. Opción B es más eficiente.'}
+ ]},
+ {id:6,title:'Cámara secreta del comité',icon:'🔐',desc:'Nivel oculto: resuelve un reto integral de alto nivel.',award:'🏆',item:5,secret:true,help:'Avanza por etapas: 1) identifica la relación; 2) escala; 3) calcula la tasa unitaria; 4) elige con evidencia.',questions:[
+  {q:'Reto secreto 1/3. Un equipo prepara 24 ensaladas y 16 jugos. Si quiere conservar la relación y preparar 42 ensaladas, ¿cuántos jugos necesita?',o:['24','28','30','32'],a:1,e:'24:16 = 3:2. Si hay 42 ensaladas, 42÷3=14 grupos; 14×2=28 jugos.'},
+  {q:'Reto secreto 2/3. Para atender 84 estudiantes, circuito A recibe 7 estudiantes cada 6 minutos y circuito B recibe 8 cada 8 minutos. ¿Cuál termina primero?',o:['A: 72 minutos','B: 72 minutos','A: 84 minutos','Empate: 84 minutos'],a:0,e:'A necesita 12 rondas: 12×6=72 min. B necesita 10.5 rondas, pero requiere 11 rondas completas: 11×8=88 min. A termina primero.'},
+  {q:'Reto secreto 3/3. Elige la conclusión mejor justificada para la feria.',o:['Una razón siempre se obtiene restando','La opción con mayor total siempre conviene','Las tasas unitarias permiten comparar opciones de distinto tamaño de forma justa','Las proporciones solo sirven para precios'],a:2,e:'La tasa unitaria permite comparar cantidades diferentes usando una referencia común: 1 unidad.'}
+ ]}
+];
+let state={tutorial:false,completed:[],score:0,crowns:0,cups:0,items:[],answers:[],currentLevel:null,currentQuestion:0,selected:null,hints:0};
+let tutorialIndex=0;
+function qs(id){return document.getElementById(id)}
+function persist(){localStorage.setItem('guardianesFeriaU5',JSON.stringify(state));localStorage.setItem('guardianesFeriaName',qs('studentName').value);localStorage.setItem('guardianesFeriaGroup',qs('studentGroup').value)}
+function load(){try{const saved=JSON.parse(localStorage.getItem('guardianesFeriaU5'));if(saved)state={...state,...saved};qs('studentName').value=localStorage.getItem('guardianesFeriaName')||'';qs('studentGroup').value=localStorage.getItem('guardianesFeriaGroup')||''}catch(e){} renderAll()}
+function renderAll(){renderMap();renderCollection();updateStats();updateReport();persist()}
+function updateStats(){qs('scoreTop').textContent=state.score;qs('crownsTop').textContent=state.crowns;qs('cupsTop').textContent=state.cups;qs('itemsTop').textContent=state.items.length}
+function isUnlocked(level){if(level.id===1)return state.tutorial;if(level.secret)return LEVELS.slice(0,5).every(l=>state.completed.includes(l.id));return state.completed.includes(level.id-1)}
+function renderMap(){const grid=qs('levelGrid');grid.innerHTML='';LEVELS.forEach(l=>{const unlocked=isUnlocked(l),done=state.completed.includes(l.id);const card=document.createElement('article');card.className='level-card'+(!unlocked?' locked':'')+(l.secret?' secret':'');card.innerHTML=`<div class="lvl-icon">${l.secret&&!unlocked?'🔒':l.icon}</div><div class="lvl-num">${l.secret?'NIVEL OCULTO':'NIVEL '+l.id}</div><div class="lvl-title">${l.title}</div><div class="lvl-desc">${l.desc}</div><div class="lvl-bottom"><span class="mini">${done?'✅ Superado':unlocked?'Disponible':'Bloqueado'}</span><button class="btn ${l.secret?'purple':''}" ${!unlocked?'disabled':''} onclick="startLevel(${l.id})">${done?'Repetir':'Jugar'}</button></div>`;grid.appendChild(card)});qs('mapStatus').textContent=!state.tutorial?'Tutorial pendiente':state.completed.length<5?`${state.completed.length}/5 niveles principales`:state.completed.includes(6)?'¡Misión completa!':'Nivel oculto disponible'}
+function renderCollection(){const c=qs('collectionGrid');c.innerHTML='';ITEMS.forEach((it,i)=>{const earned=state.items.includes(i);c.innerHTML+=`<div class="collect ${earned?'earned':''}"><div class="emoji">${it.emoji}</div><b>${it.name}</b><small>${earned?it.desc:'Pendiente'}</small></div>`})}
+function openTutorial(){tutorialIndex=0;showTutorial();qs('tutorialModal').classList.remove('hidden')}
+function showTutorial(){document.querySelectorAll('.tutorial-step').forEach((el,i)=>el.classList.toggle('active',i===tutorialIndex));qs('tutorialPrev').disabled=tutorialIndex===0;qs('tutorialNext').textContent=tutorialIndex===4?'Finalizar tutorial ✓':'Siguiente →'}
+function tutorialNext(){if(tutorialIndex<4){tutorialIndex++;showTutorial()}else{state.tutorial=true;closeModal('tutorialModal');celebrate('🎓');renderAll()}}
+function tutorialPrev(){if(tutorialIndex>0){tutorialIndex--;showTutorial()}}
+function closeModal(id){qs(id).classList.add('hidden')}
+function startLevel(id){if(!isUnlocked(LEVELS[id-1]))return;state.currentLevel=id;state.currentQuestion=0;state.selected=null;qs('levelModal').classList.remove('hidden');renderQuestion()}
+function renderQuestion(){const level=LEVELS[state.currentLevel-1],q=level.questions[state.currentQuestion];qs('modalLevelTitle').textContent=`${level.icon} Nivel ${level.id}: ${level.title}`;qs('questionProgress').style.width=`${(state.currentQuestion/level.questions.length)*100}%`;qs('questionArea').innerHTML=`<div class="question-card"><div class="question-label">Pregunta ${state.currentQuestion+1} de ${level.questions.length}</div><h3>${q.q}</h3><div class="options">${q.o.map((x,i)=>`<button class="option" onclick="selectOption(${i},this)">${String.fromCharCode(65+i)}) ${x}</button>`).join('')}</div><div id="fbOk" class="feedback ok"></div><div id="fbBad" class="feedback bad"></div><div id="hintBox" class="help hidden"><h4>💡 Ayuda guiada</h4><p>${level.help}</p></div><div class="modal-actions"><button class="btn secondary" onclick="showHint()">💡 Solicitar ayuda</button><button id="confirmBtn" class="btn" onclick="confirmAnswer()" disabled>Confirmar respuesta</button></div></div>`}
+function selectOption(i,el){state.selected=i;document.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));el.classList.add('selected');qs('confirmBtn').disabled=false}
+function showHint(){qs('hintBox').classList.remove('hidden');state.hints++;persist()}
+function confirmAnswer(){const level=LEVELS[state.currentLevel-1],q=level.questions[state.currentQuestion];document.querySelectorAll('.option').forEach((o,i)=>{o.disabled=true;if(i===q.a)o.classList.add('correct');if(i===state.selected&&i!==q.a)o.classList.add('wrong')});const ok=state.selected===q.a;const fb=qs(ok?'fbOk':'fbBad');fb.style.display='block';fb.textContent=(ok?'✅ ¡Correcto! ':'🧩 Sigue aprendiendo. ')+q.e;state.answers.push({level:level.id,question:q.q,selected:q.o[state.selected],correct:q.o[q.a],ok});if(ok){state.score+=100;celebrate('⭐')}else{state.score+=25;qs('hintBox').classList.remove('hidden')}const actions=document.querySelector('.modal-actions');actions.innerHTML=`<button class="btn ${state.currentQuestion===level.questions.length-1?'yellow':''}" onclick="nextQuestion()">${state.currentQuestion===level.questions.length-1?'Ver recompensa':'Siguiente pregunta →'}</button>`;updateStats();persist()}
+function nextQuestion(){const level=LEVELS[state.currentLevel-1];if(state.currentQuestion<level.questions.length-1){state.currentQuestion++;state.selected=null;renderQuestion()}else finishLevel(level)}
+function finishLevel(level){if(!state.completed.includes(level.id)){state.completed.push(level.id);state.items.push(level.item);if(level.award==='👑')state.crowns++;else state.cups++;state.score+=300}qs('questionProgress').style.width='100%';qs('questionArea').innerHTML=`<div class="award"><div class="award-emoji">${level.award}</div><h3>¡Nivel superado!</h3><p>Has completado <b>${level.title}</b>.</p><span class="prize">Objeto obtenido: ${ITEMS[level.item].emoji} ${ITEMS[level.item].name}</span><div class="actions" style="justify-content:center"><button class="btn" onclick="closeModal('levelModal');renderAll()">Volver al mapa</button></div></div>`;celebrate(level.award);renderAll()}
+function celebrate(symbol){for(let i=0;i<12;i++){const s=document.createElement('span');s.className='spark';s.textContent=symbol;s.style.left=(45+Math.random()*10)+'vw';s.style.top=(45+Math.random()*10)+'vh';s.style.animationDelay=(Math.random()*.3)+'s';document.body.appendChild(s);setTimeout(()=>s.remove(),1400)}}
+function updateReport(){const complete=state.completed.length>=5;qs('downloadBtn').disabled=!complete;qs('reportSummary').innerHTML=`Niveles superados: <b>${state.completed.length}/6</b><br>Puntos acumulados: <b>${state.score}</b><br>Coronas: <b>${state.crowns}</b> · Copas: <b>${state.cups}</b><br>Objetos reunidos: <b>${state.items.length}/6</b>${complete?'<br><span style="color:#166534;font-weight:900">✓ Ya puedes descargar tu reporte.</span>':'<br><span style="color:#9a3412;font-weight:900">Completa los niveles 1 al 5 para habilitar el reporte.</span>'}`}
+function saveProgress(){persist();alert('Tu avance se guardó en este dispositivo.')}
+function resetGame(){if(confirm('¿Quieres reiniciar todo el progreso?')){localStorage.removeItem('guardianesFeriaU5');state={tutorial:false,completed:[],score:0,crowns:0,cups:0,items:[],answers:[],currentLevel:null,currentQuestion:0,selected:null,hints:0};renderAll()}}
+function xmlEscape(s=''){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;')}
+function crc32(bytes){let table=crc32.table||(crc32.table=(()=>{let t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=(c&1)?0xedb88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})());let crc=0xffffffff;for(const b of bytes)crc=table[(crc^b)&255]^(crc>>>8);return (crc^0xffffffff)>>>0}
+function u16(n){return [n&255,(n>>>8)&255]} function u32(n){return [n&255,(n>>>8)&255,(n>>>16)&255,(n>>>24)&255]}
+function strBytes(s){return new TextEncoder().encode(s)}
+function zipStore(files){let parts=[],centrals=[],offset=0;for(const [name,content] of Object.entries(files)){const n=strBytes(name),d=strBytes(content),crc=crc32(d);const local=new Uint8Array([...u32(0x04034b50),...u16(20),...u16(0),...u16(0),...u16(0),...u16(0),...u32(crc),...u32(d.length),...u32(d.length),...u16(n.length),...u16(0),...n]);parts.push(local,d);const central=new Uint8Array([...u32(0x02014b50),...u16(20),...u16(20),...u16(0),...u16(0),...u16(0),...u16(0),...u32(crc),...u32(d.length),...u32(d.length),...u16(n.length),...u16(0),...u16(0),...u16(0),...u16(0),...u32(0),...u32(offset),...n]);centrals.push(central);offset+=local.length+d.length}const centralSize=centrals.reduce((a,b)=>a+b.length,0),end=new Uint8Array([...u32(0x06054b50),...u16(0),...u16(0),...u16(centrals.length),...u16(centrals.length),...u32(centralSize),...u32(offset),...u16(0)]);return new Blob([...parts,...centrals,end],{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'})}
+function p(text,style='Normal',extra=''){return `<w:p><w:pPr><w:pStyle w:val="${style}"/>${extra}</w:pPr><w:r><w:t xml:space="preserve">${xmlEscape(text)}</w:t></w:r></w:p>`}
+function table(rows){return `<w:tbl><w:tblPr><w:tblW w:w="0" w:type="auto"/><w:tblBorders><w:top w:val="single" w:sz="6" w:space="0" w:color="99D8CE"/><w:left w:val="single" w:sz="6" w:space="0" w:color="99D8CE"/><w:bottom w:val="single" w:sz="6" w:space="0" w:color="99D8CE"/><w:right w:val="single" w:sz="6" w:space="0" w:color="99D8CE"/><w:insideH w:val="single" w:sz="4" w:space="0" w:color="D9EBE7"/><w:insideV w:val="single" w:sz="4" w:space="0" w:color="D9EBE7"/></w:tblBorders></w:tblPr>${rows.map((r,ri)=>`<w:tr>${r.map(c=>`<w:tc><w:tcPr>${ri===0?'<w:shd w:fill="CCFBF1"/>':''}</w:tcPr>${p(c,ri===0?'TableHeader':'Normal')}</w:tc>`).join('')}</w:tr>`).join('')}</w:tbl>`}
+function downloadDocxReport(){const name=qs('studentName').value.trim()||'Alumno';const group=qs('studentGroup').value.trim()||'Sin grupo';const reflection=qs('reflection').value.trim()||'Sin reflexión capturada.';persist();const date=new Date().toLocaleString('es-MX');const itemText=state.items.map(i=>ITEMS[i].emoji+' '+ITEMS[i].name).join(', ');const mainRows=[['Indicador','Resultado'],['Alumno',name],['Grupo',group],['Fecha',date],['Puntos',String(state.score)],['Niveles superados',state.completed.join(', ')],['Coronas',String(state.crowns)],['Copas',String(state.cups)],['Ayudas utilizadas',String(state.hints)],['Colección',itemText]];const detail=[['Nivel','Pregunta','Respuesta del alumno','Respuesta correcta','Resultado'],...state.answers.map(a=>[String(a.level),a.question,a.selected,a.correct,a.ok?'Correcto':'Revisar'])];const documentXml=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${p('GUARDIANES DE LA FERIA DEL BIENESTAR','Title')}${p('Reporte individual de evidencia · Unidad 5','Subtitle')}${p('Razones · Proporciones equivalentes · Tasas unitarias','Subtitle')}${p('Resumen del desempeño','Heading1')}${table(mainRows)}${p('Reflexión del alumno','Heading1')}${p(reflection)}${p('Detalle de respuestas','Heading1')}${table(detail)}${p('Mensaje final','Heading1')}${p(state.completed.includes(6)?'¡Misión completa! Superaste también el nivel oculto y demostraste perseverancia matemática.':'¡Buen trabajo! Has completado los niveles principales. Sigue practicando para fortalecer tus estrategias.')}${p('Este reporte fue generado automáticamente por el videojuego educativo Guardianes de la Feria del Bienestar.','Small')}<w:sectPr><w:pgSz w:w="12240" w:h="15840"/><w:pgMar w:top="720" w:right="720" w:bottom="720" w:left="720"/></w:sectPr></w:body></w:document>`;const styles=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:rPr><w:rFonts w:ascii="Aptos" w:hAnsi="Aptos"/><w:sz w:val="20"/><w:color w:val="26413E"/></w:rPr></w:style><w:style w:type="paragraph" w:styleId="Title"><w:name w:val="Title"/><w:pPr><w:jc w:val="center"/><w:spacing w:after="140"/></w:pPr><w:rPr><w:rFonts w:ascii="Aptos Display" w:hAnsi="Aptos Display"/><w:b/><w:sz w:val="36"/><w:color w:val="0F766E"/></w:rPr></w:style><w:style w:type="paragraph" w:styleId="Subtitle"><w:name w:val="Subtitle"/><w:pPr><w:jc w:val="center"/><w:spacing w:after="60"/></w:pPr><w:rPr><w:i/><w:sz w:val="22"/><w:color w:val="5B7773"/></w:rPr></w:style><w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="Heading 1"/><w:pPr><w:spacing w:before="220" w:after="100"/></w:pPr><w:rPr><w:b/><w:sz w:val="28"/><w:color w:val="0F766E"/></w:rPr></w:style><w:style w:type="paragraph" w:styleId="TableHeader"><w:name w:val="Table Header"/><w:rPr><w:b/><w:color w:val="115E59"/></w:rPr></w:style><w:style w:type="paragraph" w:styleId="Small"><w:name w:val="Small"/><w:rPr><w:i/><w:sz w:val="16"/><w:color w:val="64748B"/></w:rPr></w:style></w:styles>`;const files={'[Content_Types].xml':`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/><Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/></Types>`,'_rels/.rels':`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/><Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" Target="docProps/app.xml"/></Relationships>`,'word/document.xml':documentXml,'word/styles.xml':styles,'word/_rels/document.xml.rels':`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`,'docProps/core.xml':`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:title>Reporte Guardianes de la Feria del Bienestar</dc:title><dc:creator>Videojuego educativo U5</dc:creator></cp:coreProperties>`,'docProps/app.xml':`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties"><Application>Guardianes de la Feria del Bienestar</Application></Properties>`};const blob=zipStore(files),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`Reporte_Guardianes_Feria_${name.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ]+/g,'_')}.docx`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500)}
+load();
+</script>
+</body>
+</html>
